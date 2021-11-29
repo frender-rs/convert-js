@@ -46,6 +46,7 @@ dependencies = [
 name = "convert-js-macros"
 version = "0.1.0"
 dependencies = [
+ "convert-js",
  "darling",
  "proc-macro2",
  "quote",

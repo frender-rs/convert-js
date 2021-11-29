@@ -3,11 +3,8 @@ use darling::util::Flag;
 /// Please go to docs of each variant to see
 /// what the following enum will be converted as.
 ///
-///  ```
-/// # use convert_js_macros::ToJs;
-/// # trait ToJs {}
-/// # enum Nullable<T> { Null, NonNull(T) }
-/// # enum UndefinedOr<T> { Undefined, Defined(T) }
+/// ```compile_fail
+/// # use convert_js::{ToJs, Nullable, Maybe };
 ///
 /// #[derive(ToJs)]
 /// enum MyEnum {
@@ -15,7 +12,7 @@ use darling::util::Flag;
 ///     VariantTuple(f64, bool),
 ///     VariantStruct {
 ///         field1: Option<usize>,
-///         field2: UndefinedOr<usize>,
+///         field2: Maybe<usize>,
 ///         field3: Nullable<usize>,
 ///     },
 ///     VariantUnit,
@@ -51,9 +48,8 @@ pub enum EnumConvertJsStyle {
     ///
     /// You can control the content of `VariantUnit` with `content_as`:
     ///
-    /// ```
-    /// # use convert_js_macros::ToJs;
-    /// # trait ToJs {}
+    /// ```compile_fail
+    /// # use convert_js::ToJs;
     ///
     /// #[derive(ToJs)]
     /// enum MyEnum {
