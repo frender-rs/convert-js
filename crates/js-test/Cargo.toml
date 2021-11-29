@@ -2,7 +2,7 @@
 name = "js-test"
 edition = "2021"
 
-version = "1.0.0-alpha.3" # replace version
+version = "1.0.0-alpha.4" # replace version
 
 description = "wasm bindgen js test utilities"
 license = "MIT"

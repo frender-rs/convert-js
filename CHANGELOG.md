@@ -1,3 +1,10 @@
+# [1.0.0-alpha.4](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2021-11-29)
+
+
+### Bug Fixes
+
+* **convert-js-macros:** cargo package meta ([41d79a3](https://github.com/frender-rs/convert-js/commit/41d79a32242a2207607eefe2c666ea7cfbcaaa72))
+
 # [1.0.0-alpha.3](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2021-11-29)
 
 
