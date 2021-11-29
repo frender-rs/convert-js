@@ -4,6 +4,23 @@ edition = "2021"
 
 version = "0.1.0" # replace version
 
+description = "Convert rust wasm from/to js"
+license = "MIT"
+authors = [
+    "Equal Ma <equalma@outlook.com>",
+]
+homepage = "https://github.com/frender-rs/convert-js"
+repository = "https://github.com/frender-rs/convert-js"
+categories = [
+    "wasm",
+]
+keywords = [
+    "wasm",
+    "convert",
+    "js",
+    "serde",
+]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

@@ -4,6 +4,24 @@ edition = "2021"
 
 version = "0.1.0" # replace version
 
+description = "wasm bindgen js test utilities"
+license = "MIT"
+authors = [
+    "Equal Ma <equalma@outlook.com>",
+]
+homepage = "https://github.com/frender-rs/convert-js"
+repository = "https://github.com/frender-rs/convert-js"
+categories = [
+    "wasm",
+    "development-tools::testing",
+]
+keywords = [
+    "wasm",
+    "bindgen",
+    "js",
+    "test",
+]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
