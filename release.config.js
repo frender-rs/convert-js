@@ -1,10 +1,9 @@
 const CARGO_PROJECTS = [
   //
-  "crates/js-test",
-  "crates/convert-js",
-];
-
-const CARGO_FILES = CARGO_PROJECTS.map((dir) => `${dir}/Cargo.toml`);
+  { dir: "crates/js-test", replace: 1 },
+  { dir: "crates/convert-js", replace: 2 },
+  { dir: "crates/convert-js-macros", replace: 1 },
+].map((pro) => ({ ...pro, file: `${pro.dir}/Cargo.toml` }));
 
 module.exports = {
   branches: [
@@ -24,14 +23,14 @@ module.exports = {
       {
         replacements: [
           {
-            files: CARGO_FILES,
+            files: CARGO_PROJECTS.map((pro) => pro.file),
             from: 'version = ".*" # replace version',
             to: 'version = "${nextRelease.version}" # replace version',
-            results: CARGO_FILES.map((file) => ({
-              file,
+            results: CARGO_PROJECTS.map((pro) => ({
+              file: pro.file,
               hasChanged: true,
-              numMatches: 1,
-              numReplacements: 1,
+              numMatches: pro.replace,
+              numReplacements: pro.replace,
             })),
             countMatches: true,
           },
@@ -41,11 +40,17 @@ module.exports = {
     ["@semantic-release/exec", { prepareCmd: "cargo check" }],
     ...CARGO_PROJECTS.map((pro) => [
       "@semantic-release/exec",
-      { publishCmd: "cargo publish", execCwd: pro },
+      { publishCmd: "cargo publish", execCwd: pro.dir },
     ]),
     [
       "@semantic-release/git",
-      { assets: ["CHANGELOG.md", "Cargo.lock", ...CARGO_FILES] },
+      {
+        assets: [
+          "CHANGELOG.md",
+          "Cargo.lock",
+          ...CARGO_PROJECTS.map((pro) => pro.file),
+        ],
+      },
     ],
     "@semantic-release/github",
   ],
