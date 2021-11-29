@@ -1,3 +1,18 @@
+# [1.0.0-alpha.2](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2021-11-29)
+
+
+### Bug Fixes
+
+* **js-test:** js_test::deep_equal should check for Date ([6ec70bf](https://github.com/frender-rs/convert-js/commit/6ec70bf30e8f6750c2b01e09433479507960b602))
+
+
+### Features
+
+* **convert-js-macros:** derive ToJs for structs ([5a57e99](https://github.com/frender-rs/convert-js/commit/5a57e994297531a997caaa11149921c29d44159f))
+* **convert-js:** macro jsv ([485440e](https://github.com/frender-rs/convert-js/commit/485440e3067b003e3321d8bb1d9bc155dc0a3403))
+* **convert-js:** Nullable and Maybe ([50662e0](https://github.com/frender-rs/convert-js/commit/50662e04fa4fbee4454553d92ef3a19e45dc3ded))
+* **convert-js:** trait ToJs ([f4b0958](https://github.com/frender-rs/convert-js/commit/f4b0958fac78d0410fb10ccc2dc02fb954f76375))
+
 # 1.0.0-alpha.1 (2021-11-29)
 
 
