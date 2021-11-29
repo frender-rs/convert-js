@@ -1,8 +1,8 @@
 const CARGO_PROJECTS = [
   //
   { dir: "crates/js-test", replace: 1 },
-  { dir: "crates/convert-js", replace: 2 },
   { dir: "crates/convert-js-macros", replace: 1 },
+  { dir: "crates/convert-js", replace: 2 },
 ].map((pro) => ({ ...pro, file: `${pro.dir}/Cargo.toml` }));
 
 module.exports = {
