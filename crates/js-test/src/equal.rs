@@ -34,6 +34,14 @@ pub fn deep_equal(v1: &JsValue, v2: &JsValue) -> bool {
                     let o2 = v2.dyn_ref::<js_sys::Object>();
                     match (o1, o2) {
                         (Some(o1), Some(o2)) => {
+                            let d1 = o1.dyn_ref::<js_sys::Date>();
+                            let d2 = o2.dyn_ref::<js_sys::Date>();
+
+                            match (d1, d2) {
+                                (Some(d1), Some(d2)) => return d1.get_time() == d2.get_time(),
+                                _ => {}
+                            }
+
                             let keys1 = js_sys::Reflect::own_keys(&o1).unwrap();
                             let keys2 =
                                 js_sys::Set::new(js_sys::Reflect::own_keys(&o2).unwrap().as_ref());
