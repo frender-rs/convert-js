@@ -2,7 +2,7 @@
 name = "convert-js"
 edition = "2021"
 
-version = "0.1.0" # replace version
+version = "1.0.0-alpha.1" # replace version
 
 description = "Convert rust wasm from/to js"
 license = "MIT"

@@ -26,7 +26,7 @@ dependencies = [
 
 [[package]]
 name = "convert-js"
-version = "0.1.0"
+version = "1.0.0-alpha.1"
 
 [[package]]
 name = "js-sys"
@@ -39,7 +39,7 @@ dependencies = [
 
 [[package]]
 name = "js-test"
-version = "0.1.0"
+version = "1.0.0-alpha.1"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
