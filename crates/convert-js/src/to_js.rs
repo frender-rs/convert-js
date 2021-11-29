@@ -61,6 +61,13 @@ macro_rules! impl_to_js {
 impl_to_js! {
     into:
     String
+    js_sys::Object
+    js_sys::Array
+    js_sys::JsString
+    js_sys::Number
+    js_sys::BigInt
+    js_sys::Boolean
+    js_sys::Function
 }
 
 impl_to_js! {
