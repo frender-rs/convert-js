@@ -1,0 +1,45 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+      - alpha
+      - beta
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Setup wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - name: Install npm dependencies
+        run: |
+          npm install -g \
+            semantic-release@18 \
+            @semantic-release/changelog@6.0 \
+            @google/semantic-release-replace-plugin@1.1 \
+            @semantic-release/exec@6.0 \
+            @semantic-release/git@10.0
+      - name: Test
+        run: |
+          set -e
+          cargo build --verbose
+          cargo test --verbose
+          wasm-pack test --node crates/js-test
+          wasm-pack test --node crates/convert-js
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN  }}
+          GIT_AUTHOR_NAME: EqualMa
+          GIT_AUTHOR_EMAIL: equalma@outlook.com
+        run: semantic-release
