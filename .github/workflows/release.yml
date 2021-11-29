@@ -36,6 +36,7 @@ jobs:
           cargo test --verbose
           wasm-pack test --node crates/js-test
           wasm-pack test --node crates/convert-js
+          wasm-pack test --node crates/convert-js-macros
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
