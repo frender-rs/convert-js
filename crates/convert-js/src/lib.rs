@@ -7,7 +7,12 @@ pub use option_like::*;
 pub use Maybe::*;
 pub use Nullable::*;
 
+mod js_cast;
+pub use js_cast::*;
+
 pub use js_sys;
+
+pub use convert_js_macros::ToJs;
 
 #[path = "./internal/mod.rs"]
 pub mod __internal;

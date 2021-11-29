@@ -1,6 +1,6 @@
-use wasm_bindgen::JsValue;
+use wasm_bindgen::{JsCast, JsValue};
 
-use crate::ToJs;
+use crate::{ToJs, WrapJsCast};
 
 macro_rules! def_option_like {
     (
@@ -99,6 +99,12 @@ macro_rules! def_option_like {
                     Self::$name_none => $js_none,
                     Self::$name_some(v) => v.to_js(),
                 }
+            }
+        }
+
+        impl<T: JsCast> $name<WrapJsCast<T>> {
+            pub fn wrap_js_cast(v: T) -> Self {
+                Self::$name_some(WrapJsCast(v))
             }
         }
     };
