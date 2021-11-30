@@ -1,12 +1,12 @@
-const INTERVAL = 5000;
-const MAX_RETRY = 24;
+const INTERVAL = 2000;
+const MAX_RETRY = 10;
 
 const { spawn } = require("child_process");
 const fsp = require("fs/promises");
 
 async function ensureCrate(pkgName, version) {
   const command = spawn("curl", [
-    `https://docs.rs/crate/${pkgName}/${version}/builds.json`,
+    `https://crates.io/api/v1/crates/${pkgName}/${version}`,
   ]);
 
   const data = await new Promise((resolve, reject) => {
@@ -31,12 +31,11 @@ async function ensureCrate(pkgName, version) {
     res = null;
   }
 
-  if (res && res[0]) {
-    const status = res[0].build_status;
-    if (status === true) {
+  if (res) {
+    if (res.version && res.version.crate === pkgName) {
       return;
     } else {
-      throw new Error(`${pkgName}:${version} build status error: ${status}`);
+      throw new Error(`${pkgName}:${version} error: ${JSON.stringify(res)}`);
     }
   } else {
     throw new Error(`${pkgName}:${version} not available`);
