@@ -1,3 +1,17 @@
+# [1.0.0-alpha.11](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2021-11-30)
+
+
+### Bug Fixes
+
+* **convert-js-macros:** derive ToJs for new type ([7f4ed8c](https://github.com/frender-rs/convert-js/commit/7f4ed8c00b6fc4287f11f81af9f83294950c1c26))
+* **convert-js-macros:** respect rename_all ([c2f694f](https://github.com/frender-rs/convert-js/commit/c2f694f3dd48a43c60b81cce4a8e1941f207b8a1))
+* **convert-js-macros:** use fully qualified type path to call trait method ([078d3ca](https://github.com/frender-rs/convert-js/commit/078d3ca0c86fee99fab6bb43c3646a4e0ed5cd7c))
+
+
+### Features
+
+* **convert-js:** impl ToJs for Closure ([7af3fb8](https://github.com/frender-rs/convert-js/commit/7af3fb8abec0e3c3f1640ed11a5a1bad97a05e98))
+
 # [1.0.0-alpha.10](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2021-11-30)
 
 
