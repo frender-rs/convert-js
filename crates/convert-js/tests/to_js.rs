@@ -72,3 +72,25 @@ fn slice_as_js() {
     assert_eq!(arr.get(3), 100);
     assert_eq!(arr.get(4), 101);
 }
+
+#[wasm_bindgen_test]
+fn closure_as_js() {
+    use std::{cell::RefCell, rc::Rc};
+    use wasm_bindgen::closure::Closure;
+
+    let a = Rc::new(RefCell::new(0));
+    let closure = Closure::wrap(Box::new({
+        let a = Rc::clone(&a);
+        move || {
+            let mut a = a.borrow_mut();
+            *a += 1;
+        }
+    }) as Box<dyn FnMut()>);
+
+    let args = js_sys::Array::new();
+    js_sys::Reflect::apply(closure.as_ref().dyn_ref().unwrap(), &JsValue::NULL, &args).unwrap();
+    js_sys::Reflect::apply(closure.as_ref().dyn_ref().unwrap(), &JsValue::NULL, &args).unwrap();
+    js_sys::Reflect::apply(closure.as_ref().dyn_ref().unwrap(), &JsValue::NULL, &args).unwrap();
+
+    assert_eq!(*a.borrow(), 3);
+}

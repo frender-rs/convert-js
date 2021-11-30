@@ -164,3 +164,15 @@ impl ToJs for JsValue {
         self.clone()
     }
 }
+
+impl<T: ?Sized> ToJs for wasm_bindgen::prelude::Closure<T> {
+    /// Note: unlike [`Closure::into_js_value`]
+    /// after calling `closure.to_js`,
+    /// the closure is not forgotten by rust memory.
+    /// You should make sure it lives long enough to be called in js.
+    ///
+    /// [`Closure::into_js_value`]: https://docs.rs/wasm-bindgen/0.2.78/wasm_bindgen/closure/struct.Closure.html#method.into_js_value
+    fn to_js(&self) -> JsValue {
+        AsRef::<JsValue>::as_ref(&self).clone()
+    }
+}
