@@ -1,3 +1,10 @@
+# [1.0.0-alpha.9](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2021-11-30)
+
+
+### Bug Fixes
+
+* retry publish ([8a80d81](https://github.com/frender-rs/convert-js/commit/8a80d81bc61a744fae0835df770f5e0c09c32080))
+
 # [1.0.0-alpha.8](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2021-11-30)
 
 
