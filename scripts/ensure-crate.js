@@ -1,44 +1,37 @@
 const INTERVAL = 2000;
 const MAX_RETRY = 10;
 
-const { spawn } = require("child_process");
+const { spawn, exec } = require("child_process");
+const { promisify } = require("util");
+const execAsync = promisify(exec);
+
 const fsp = require("fs/promises");
+const os = require("os");
+const path = require("path");
+
+async function withTmpDir(run) {
+  let dir = await fsp.mkdtemp(path.join(os.tmpdir(), "cargo-ensure-crate-"));
+
+  try {
+    const ret = await run(dir);
+    return ret;
+  } finally {
+    await fsp.rm(dir, { recursive: true, force: true });
+  }
+}
 
 async function ensureCrate(pkgName, version) {
-  const command = spawn("curl", [
-    `https://crates.io/api/v1/crates/${pkgName}/${version}`,
-  ]);
-
-  const data = await new Promise((resolve, reject) => {
-    let data = "";
-    command.stdout.on("data", (d) => {
-      data += d.toString();
-    });
-
-    command.on("close", function (code) {
-      if (code === 0) resolve(data);
-      else reject(new Error(`curl exited with code ${code}`));
-    });
-    command.on("error", function (err) {
-      reject(err);
-    });
-  });
-
-  let res;
   try {
-    res = JSON.parse(data);
-  } catch (error) {
-    res = null;
-  }
-
-  if (res) {
-    if (res.version && res.version.crate === pkgName && res.version.dl_path) {
-      return;
-    } else {
-      throw new Error(`${pkgName}:${version} error: ${JSON.stringify(res)}`);
-    }
-  } else {
-    throw new Error(`${pkgName}:${version} not available`);
+    await withTmpDir(async (dir) => {
+      await execAsync("cargo init --vcs none", { cwd: dir });
+      await fsp.appendFile(
+        path.join(dir, "Cargo.toml"),
+        `\n${pkgName} = "=${version}"\n`
+      );
+      await execAsync("cargo check", { cwd: dir });
+    });
+  } catch (err) {
+    throw new Error(`${pkgName}:${version} not available: ${err.message}`);
   }
 }
 
