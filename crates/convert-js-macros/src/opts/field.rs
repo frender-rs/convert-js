@@ -7,6 +7,7 @@ use crate::rename::{Rename, RenameRule};
 #[darling(attributes(convert_js))]
 pub struct FieldOptsInput {
     ident: Option<syn::Ident>,
+    ty: syn::Type,
 
     #[darling(default)]
     rename: Option<Rename>,
@@ -14,6 +15,8 @@ pub struct FieldOptsInput {
 
 pub struct NamedFieldOpts {
     pub ident: syn::Ident,
+    pub ty: syn::Type,
+
     pub rename: Option<Rename>,
 }
 
@@ -32,16 +35,23 @@ impl NamedFieldOpts {
 
 pub struct IndexedFieldOpts {
     pub index: syn::Index,
+    pub ty: syn::Type,
 }
 
-pub struct NewTypeFieldOpts {}
+pub struct NewTypeFieldOpts {
+    pub ty: syn::Type,
+}
 
 fn check_new_type_field(field: FieldOptsInput) -> Result<NewTypeFieldOpts, String> {
     match field {
         FieldOptsInput {
             ident: None,
+            ty,
             rename: None,
-        } => Ok(NewTypeFieldOpts {}),
+        } => Ok(NewTypeFieldOpts {
+            //
+            ty,
+        }),
         _ => Err(format!(
             "field in struct in NewType style cannot be named or renamed"
         )),
@@ -51,12 +61,24 @@ fn check_new_type_field(field: FieldOptsInput) -> Result<NewTypeFieldOpts, Strin
 fn check_named_fields(fields: Vec<FieldOptsInput>) -> Result<Vec<NamedFieldOpts>, String> {
     fields
         .into_iter()
-        .map(|FieldOptsInput { ident, rename }| match ident {
-            Some(ident) => Ok(NamedFieldOpts { ident, rename }),
-            None => {
-                Err("struct with named fields must not contain fields without identifier".into())
-            }
-        })
+        .map(
+            |FieldOptsInput {
+                 //
+                 ident,
+                 ty,
+                 rename,
+             }| match ident {
+                Some(ident) => Ok(NamedFieldOpts {
+                    //
+                    ident,
+                    ty,
+                    rename,
+                }),
+                None => Err(
+                    "struct with named fields must not contain fields without identifier".into(),
+                ),
+            },
+        )
         .collect()
 }
 
@@ -64,15 +86,25 @@ fn check_indexed_fields(fields: Vec<FieldOptsInput>) -> Result<Vec<IndexedFieldO
     fields
         .into_iter()
         .enumerate()
-        .map(|(i, FieldOptsInput { ident, rename: _ })| match ident {
-            Some(ident) => Err(format!(
-                "tuple struct must not contain named field `{}`",
-                ident
-            )),
-            None => Ok(IndexedFieldOpts {
-                index: syn::Index::from(i),
-            }),
-        })
+        .map(
+            |(
+                i,
+                FieldOptsInput {
+                    ident,
+                    ty,
+                    rename: _,
+                },
+            )| match ident {
+                Some(ident) => Err(format!(
+                    "tuple struct must not contain named field `{}`",
+                    ident
+                )),
+                None => Ok(IndexedFieldOpts {
+                    ty,
+                    index: syn::Index::from(i),
+                }),
+            },
+        )
         .collect()
 }
 

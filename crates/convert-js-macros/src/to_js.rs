@@ -32,8 +32,9 @@ pub fn expand_derive_serialize(
             }
             crate::opts::ConvertJsOptsStructData::NewType(field) => {
                 crate::util::not_present!(rename_all, "struct in new type style").unwrap();
+                let ty = field.ty;
                 quote! {
-                    ::convert_js::ToJs::to_js(&self.0)
+                    &<#ty as ::convert_js::ToJs>::to_js(&self.0)
                 }
             }
             crate::opts::ConvertJsOptsStructData::Tuple(fields) => {
@@ -46,7 +47,8 @@ pub fn expand_derive_serialize(
                     list.append_separated(
                         fields.into_iter().map(|field| {
                             let i = field.index;
-                            quote! { &::convert_js::ToJs::to_js(&self.#i) }
+                            let ty = field.ty;
+                            quote! { &<#ty as ::convert_js::ToJs>::to_js(&self.#i) }
                         }),
                         quote! {,},
                     );
@@ -69,9 +71,10 @@ pub fn expand_derive_serialize(
                     let prop = field.as_property_name(rename_all.as_ref());
                     let prop = proc_macro2::Literal::string(&prop);
 
+                    let ty = field.ty;
                     let field = field.ident;
 
-                    quote! { .with_prop( &#prop , &::convert_js::ToJs::to_js(&self.#field) ) }
+                    quote! { .with_prop( &#prop , &<#ty as ::convert_js::ToJs>::to_js(&self.#field) ) }
                 }));
 
                 quote! { #tokens.into_js_value() }
