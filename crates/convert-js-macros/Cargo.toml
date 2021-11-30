@@ -2,7 +2,7 @@
 name = "convert-js-macros"
 edition = "2021"
 
-version = "1.0.0-alpha.9" # replace version
+version = "1.0.0-alpha.10" # replace version
 
 description = "macros for convert-js"
 license = "MIT"
