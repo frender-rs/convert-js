@@ -1,5 +1,5 @@
-const INTERVAL = 3000;
-const MAX_RETRY = 5;
+const INTERVAL = 5000;
+const MAX_RETRY = 24;
 
 const { spawn } = require("child_process");
 const fsp = require("fs/promises");
