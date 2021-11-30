@@ -1,3 +1,10 @@
+# [1.0.0-alpha.7](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2021-11-30)
+
+
+### Bug Fixes
+
+* add crate check time in publishing ([0cc495b](https://github.com/frender-rs/convert-js/commit/0cc495b86eaab3ece22e087d075352ebcc050ed5))
+
 # [1.0.0-alpha.6](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2021-11-30)
 
 
