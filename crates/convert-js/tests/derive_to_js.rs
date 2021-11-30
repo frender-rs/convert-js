@@ -174,3 +174,32 @@ fn new_type_struct() {
 
     assert_eq!(JsValue::from(&arr), Wrap(arr).to_js());
 }
+
+#[wasm_bindgen_test]
+fn struct_rename() {
+    #[derive(ToJs)]
+    #[convert_js(rename_all = "camelCase")]
+    struct MyObj {
+        value: &'static str,
+        my_data: i32,
+        #[convert_js(rename(rule = "PascalCase"))]
+        another_data: i32,
+        #[convert_js(rename = "type")]
+        kind: &'static str,
+    }
+
+    let js = MyObj {
+        value: "my_value",
+        my_data: 1,
+        another_data: 0,
+        kind: "obj",
+    }
+    .to_js();
+    let expected = jsv!({
+        value: "my_value",
+        myData: 1,
+        AnotherData: 0,
+        type: "obj",
+    });
+    assert!(deep_equal(&js, &expected));
+}

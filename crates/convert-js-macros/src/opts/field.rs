@@ -1,7 +1,7 @@
 use darling::{ast::Fields, util::Flag, FromField};
 
 use super::ConvertJsOptsStructData;
-use crate::rename::Rename;
+use crate::rename::{Rename, RenameRule};
 
 #[derive(Debug, FromField)]
 #[darling(attributes(convert_js))]
@@ -18,10 +18,12 @@ pub struct NamedFieldOpts {
 }
 
 impl NamedFieldOpts {
-    pub fn as_property_name(&self) -> String {
+    pub fn as_property_name(&self, rename_all: Option<&RenameRule>) -> String {
         let field_name = self.ident.to_string();
         if let Some(rename) = &self.rename {
             rename.rename_field(&field_name)
+        } else if let Some(rename_all) = rename_all {
+            rename_all.apply_to_field(&field_name)
         } else {
             field_name
         }

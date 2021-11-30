@@ -1,9 +1,6 @@
-use std::str::FromStr;
-
-use darling::{ast::Fields, FromDeriveInput, FromMeta};
-use proc_macro2::{Span, TokenStream};
+use darling::{FromDeriveInput, FromMeta};
+use proc_macro2::TokenStream;
 use quote::{quote, TokenStreamExt};
-use syn::Token;
 
 use crate::opts::ConvertJsOpts;
 
@@ -34,11 +31,13 @@ pub fn expand_derive_serialize(
                 )]);
             }
             crate::opts::ConvertJsOptsStructData::NewType(field) => {
+                crate::util::not_present!(rename_all, "struct in new type style").unwrap();
                 quote! {
                     ::convert_js::ToJs::to_js(&self.0)
                 }
             }
             crate::opts::ConvertJsOptsStructData::Tuple(fields) => {
+                crate::util::not_present!(rename_all, "tuple struct").unwrap();
                 let len = fields.len();
                 if len == 0 {
                     quote! { ::convert_js::js_sys::Array::new().into() }
@@ -67,7 +66,7 @@ pub fn expand_derive_serialize(
                 };
 
                 tokens.append_all(fields.into_iter().map(|field| {
-                    let prop = field.as_property_name();
+                    let prop = field.as_property_name(rename_all.as_ref());
                     let prop = proc_macro2::Literal::string(&prop);
 
                     let field = field.ident;
