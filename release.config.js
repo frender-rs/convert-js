@@ -1,7 +1,7 @@
 const CARGO_PROJECTS = [
   //
   { dir: "crates/js-test", replace: 1 },
-  { dir: "crates/convert-js-macros", replace: 1 },
+  { dir: "crates/convert-js-macros", replace: 1, ensure: true },
   { dir: "crates/convert-js", replace: 2 },
 ].map((pro) => ({ ...pro, file: `${pro.dir}/Cargo.toml` }));
 
@@ -40,7 +40,18 @@ module.exports = {
     ["@semantic-release/exec", { prepareCmd: "cargo check" }],
     ...CARGO_PROJECTS.map((pro) => [
       "@semantic-release/exec",
-      { publishCmd: "cargo publish", execCwd: pro.dir },
+      {
+        publishCmd: pro.ensure
+          ? `cargo publish && node ${require("path").posix.relative(
+              pro.dir,
+              require("path").posix.resolve(
+                __dirname,
+                "./scripts/ensure-crate.js"
+              )
+            )} \${nextRelease.version}`
+          : "cargo publish",
+        execCwd: pro.dir,
+      },
     ]),
     [
       "@semantic-release/git",
