@@ -32,7 +32,7 @@ async function ensureCrate(pkgName, version) {
   }
 
   if (res) {
-    if (res.version && res.version.crate === pkgName) {
+    if (res.version && res.version.crate === pkgName && res.version.dl_path) {
       return;
     } else {
       throw new Error(`${pkgName}:${version} error: ${JSON.stringify(res)}`);
