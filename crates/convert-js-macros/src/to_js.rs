@@ -34,7 +34,7 @@ pub fn expand_derive_serialize(
                 crate::util::not_present!(rename_all, "struct in new type style").unwrap();
                 let ty = field.ty;
                 quote! {
-                    &<#ty as ::convert_js::ToJs>::to_js(&self.0)
+                    <#ty as ::convert_js::ToJs>::to_js(&self.0)
                 }
             }
             crate::opts::ConvertJsOptsStructData::Tuple(fields) => {
