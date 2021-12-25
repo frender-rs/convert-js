@@ -7,7 +7,12 @@ use crate::opts::ConvertJsOpts;
 pub fn expand_derive_serialize(
     input: &mut syn::DeriveInput,
 ) -> Result<TokenStream, Vec<syn::Error>> {
-    let opts = crate::opts::ConvertJsOptsInput::from_derive_input(&input).unwrap();
+    let opts = crate::opts::ConvertJsOptsInput::from_derive_input(&input);
+    let opts = match opts {
+        Ok(v) => v,
+        Err(err) => return Ok(err.write_errors()),
+    };
+
     let ConvertJsOpts {
         ident,
         generics,

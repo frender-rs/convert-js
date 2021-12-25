@@ -1,7 +1,10 @@
 use darling::{ast::Fields, util::Flag, FromDeriveInput};
 use proc_macro2::Span;
 
-use super::{FieldOptsInput, IndexedFieldOpts, NamedFieldOpts, NewTypeFieldOpts, VariantOptsInput};
+use super::{
+    FieldOptsInput, IndexedFieldOpts, NamedFieldOpts, NewTypeFieldOpts, VariantOpts,
+    VariantOptsInput,
+};
 
 #[derive(FromDeriveInput)]
 #[darling(attributes(convert_js))]
@@ -32,7 +35,7 @@ pub struct ConvertJsOptsInput {
 
 pub enum ConvertJsOptsData {
     Enum {
-        variants: Vec<VariantOptsInput>,
+        variants: Vec<VariantOpts>,
         convert_style: super::EnumConvertJsStyle,
     },
     Struct {
@@ -87,6 +90,12 @@ impl TryFrom<ConvertJsOptsInput> for ConvertJsOpts {
                     untagged,
                 }
                 .try_into()?;
+
+                let variants = variants
+                    .into_iter()
+                    .map(|var| VariantOpts::try_from_input(var, rename_all))
+                    .collect::<Result<_, _>>()?;
+
                 Ok(ConvertJsOpts {
                     ident,
                     generics,

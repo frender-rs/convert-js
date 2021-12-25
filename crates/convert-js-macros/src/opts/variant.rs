@@ -1,6 +1,6 @@
 use darling::{util::Flag, FromVariant};
 
-use crate::rename::Rename;
+use crate::rename::{Rename, RenameRule};
 
 use super::{check_fields, ConvertJsOptsStructData, FieldOptsInput};
 
@@ -13,6 +13,12 @@ pub struct VariantOptsInput {
 
     #[darling(default)]
     rename: Option<Rename>,
+
+    /// Rename fields of this variant's content if this variant is a struct
+    #[darling(default)]
+    rename_all: Option<RenameRule>,
+    /// Convert this variant's content as a single item tuple
+    /// if it is a new type style struct
     #[darling(default)]
     new_type_as_tuple: Flag,
 }
@@ -21,7 +27,26 @@ pub struct VariantOpts {
     pub ident: syn::Ident,
     pub data: ConvertJsOptsStructData,
 
+    pub rename_all: Option<RenameRule>,
+
     pub rename: Option<Rename>,
+}
+
+impl VariantOpts {
+    pub fn try_from_input(
+        input: VariantOptsInput,
+        inherited_rename_all: Option<RenameRule>,
+    ) -> Result<Self, String> {
+        let mut v: Self = input.try_into()?;
+        match &v.data {
+            ConvertJsOptsStructData::Object(_) => {
+                v.rename_all = v.rename_all.or(inherited_rename_all);
+            }
+            _ => {}
+        };
+
+        Ok(v)
+    }
 }
 
 impl TryFrom<VariantOptsInput> for VariantOpts {
@@ -34,6 +59,7 @@ impl TryFrom<VariantOptsInput> for VariantOpts {
             fields,
             rename,
             new_type_as_tuple,
+            rename_all,
         } = value;
 
         if discriminant.is_some() {
@@ -46,6 +72,7 @@ impl TryFrom<VariantOptsInput> for VariantOpts {
                 ident,
                 data: check_fields(fields, new_type_as_tuple)?,
                 rename,
+                rename_all,
             })
         }
     }
