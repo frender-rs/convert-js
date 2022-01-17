@@ -2,7 +2,7 @@
 name = "convert-js"
 edition = "2021"
 
-version = "1.0.0-alpha.11" # replace version
+version = "1.0.0-alpha.12" # replace version
 
 description = "Convert rust wasm from/to js"
 license = "MIT"
@@ -31,7 +31,7 @@ shrinkwraprs = "0.3.0"
 [dependencies.convert-js-macros]
 path = "../convert-js-macros"
 
-version = "1.0.0-alpha.11" # replace version
+version = "1.0.0-alpha.12" # replace version
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3"

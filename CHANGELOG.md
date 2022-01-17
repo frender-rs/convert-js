@@ -1,3 +1,10 @@
+# [1.0.0-alpha.12](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2022-01-17)
+
+
+### Features
+
+* **convert-js-macros:** derive ToJs for union enum ([df9fdd8](https://github.com/frender-rs/convert-js/commit/df9fdd89b84c90536c5c71d7cd0e2de944967bfe))
+
 # [1.0.0-alpha.11](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2021-11-30)
 
 
