@@ -6,7 +6,7 @@ use super::RenameRule;
 /// `#[convert_js(rename(rule = "lowercase"))]`
 ///
 /// `#[convert_js(rename = "my_custom_name")]`
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Rename {
     WithRule(RenameRule),
     Literal(String),
@@ -16,6 +16,13 @@ impl Rename {
     pub fn rename_field(&self, field_name: &str) -> String {
         match self {
             Rename::WithRule(rule) => rule.apply_to_field(field_name),
+            Rename::Literal(name) => name.to_owned(),
+        }
+    }
+
+    pub fn rename_variant(&self, variant_name: &str) -> String {
+        match self {
+            Rename::WithRule(rule) => rule.apply_to_variant(variant_name),
             Rename::Literal(name) => name.to_owned(),
         }
     }

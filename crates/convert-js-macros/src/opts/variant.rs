@@ -27,8 +27,6 @@ pub struct VariantOpts {
     pub ident: syn::Ident,
     pub data: ConvertJsOptsStructData,
 
-    pub rename_all: Option<RenameRule>,
-
     pub rename: Option<Rename>,
 }
 
@@ -38,9 +36,9 @@ impl VariantOpts {
         inherited_rename_all: Option<RenameRule>,
     ) -> Result<Self, String> {
         let mut v: Self = input.try_into()?;
-        match &v.data {
-            ConvertJsOptsStructData::Object(_) => {
-                v.rename_all = v.rename_all.or(inherited_rename_all);
+        match &mut v.data {
+            ConvertJsOptsStructData::Object { rename_all, .. } => {
+                *rename_all = rename_all.or(inherited_rename_all);
             }
             _ => {}
         };
@@ -70,9 +68,8 @@ impl TryFrom<VariantOptsInput> for VariantOpts {
         } else {
             Ok(Self {
                 ident,
-                data: check_fields(fields, new_type_as_tuple)?,
+                data: check_fields(fields, new_type_as_tuple, rename_all)?,
                 rename,
-                rename_all,
             })
         }
     }

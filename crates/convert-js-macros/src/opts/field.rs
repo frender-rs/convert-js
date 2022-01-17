@@ -13,6 +13,7 @@ pub struct FieldOptsInput {
     rename: Option<Rename>,
 }
 
+#[derive(Debug, Clone)]
 pub struct NamedFieldOpts {
     pub ident: syn::Ident,
     pub ty: syn::Type,
@@ -33,11 +34,13 @@ impl NamedFieldOpts {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct IndexedFieldOpts {
     pub index: syn::Index,
     pub ty: syn::Type,
 }
 
+#[derive(Debug, Clone)]
 pub struct NewTypeFieldOpts {
     pub ty: syn::Type,
 }
@@ -111,8 +114,14 @@ fn check_indexed_fields(fields: Vec<FieldOptsInput>) -> Result<Vec<IndexedFieldO
 pub fn check_fields(
     fields: Fields<FieldOptsInput>,
     new_type_as_tuple: Flag,
+    rename_all: Option<RenameRule>,
 ) -> Result<ConvertJsOptsStructData, String> {
     let Fields { style, fields, .. } = fields;
+
+    if !style.is_struct() {
+        crate::util::not_present!(rename_all, "non-object struct")?;
+    }
+
     let data = match style {
         darling::ast::Style::Tuple => {
             if fields.len() == 1 {
@@ -133,7 +142,7 @@ pub fn check_fields(
         }
         darling::ast::Style::Struct => {
             let fields = check_named_fields(fields)?;
-            Ok(ConvertJsOptsStructData::Object(fields))
+            Ok(ConvertJsOptsStructData::Object { fields, rename_all })
         }
         darling::ast::Style::Unit => {
             if fields.len() == 0 {

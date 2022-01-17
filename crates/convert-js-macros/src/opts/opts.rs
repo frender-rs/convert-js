@@ -1,5 +1,4 @@
-use darling::{ast::Fields, util::Flag, FromDeriveInput};
-use proc_macro2::Span;
+use darling::{util::Flag, FromDeriveInput};
 
 use super::{
     FieldOptsInput, IndexedFieldOpts, NamedFieldOpts, NewTypeFieldOpts, VariantOpts,
@@ -37,17 +36,22 @@ pub enum ConvertJsOptsData {
     Enum {
         variants: Vec<VariantOpts>,
         convert_style: super::EnumConvertJsStyle,
+        rename_all: Option<crate::rename::RenameRule>,
     },
     Struct {
         data: ConvertJsOptsStructData,
     },
 }
 
+#[derive(Debug, Clone)]
 pub enum ConvertJsOptsStructData {
     Unit,
     NewType(NewTypeFieldOpts),
     Tuple(Vec<IndexedFieldOpts>),
-    Object(Vec<NamedFieldOpts>),
+    Object {
+        fields: Vec<NamedFieldOpts>,
+        rename_all: Option<crate::rename::RenameRule>,
+    },
 }
 
 pub struct ConvertJsOpts {
@@ -55,8 +59,6 @@ pub struct ConvertJsOpts {
     pub generics: syn::Generics,
 
     pub data: ConvertJsOptsData,
-
-    pub rename_all: Option<crate::rename::RenameRule>,
 }
 
 impl TryFrom<ConvertJsOptsInput> for ConvertJsOpts {
@@ -102,8 +104,8 @@ impl TryFrom<ConvertJsOptsInput> for ConvertJsOpts {
                     data: ConvertJsOptsData::Enum {
                         variants,
                         convert_style,
+                        rename_all,
                     },
-                    rename_all,
                 })
             }
             darling::ast::Data::Struct(fields) => {
@@ -113,13 +115,12 @@ impl TryFrom<ConvertJsOptsInput> for ConvertJsOpts {
                 crate::util::not_present!(union, struct)?;
                 crate::util::not_present!(untagged, struct)?;
 
-                let data = super::check_fields(fields, new_type_as_tuple)?;
+                let data = super::check_fields(fields, new_type_as_tuple, rename_all)?;
 
                 Ok(ConvertJsOpts {
                     ident,
                     generics,
                     data: ConvertJsOptsData::Struct { data },
-                    rename_all,
                 })
             }
         }
