@@ -1,3 +1,10 @@
+# [1.0.0-alpha.13](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.12...v1.0.0-alpha.13) (2022-01-18)
+
+
+### Features
+
+* **convert-js-macros:** derive ToJs for types with generics ([01b7ef3](https://github.com/frender-rs/convert-js/commit/01b7ef312cc17c78e6a0ffa1de56b09d07ab3980))
+
 # [1.0.0-alpha.12](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2022-01-17)
 
 
