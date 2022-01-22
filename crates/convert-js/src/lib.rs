@@ -1,6 +1,9 @@
 mod to_js;
 pub use to_js::*;
 
+mod from_js;
+pub use from_js::*;
+
 mod option_like;
 pub use option_like::*;
 

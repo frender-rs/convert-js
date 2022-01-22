@@ -1,11 +1,12 @@
 use wasm_bindgen::{JsCast, JsValue};
 
-use crate::{ToJs, WrapJsCast};
+use crate::{FromJs, ToJs, WrapJsCast};
 
 macro_rules! def_option_like {
     (
         $name:ident {
             None = $name_none:ident = $js_none_doc:literal $js_none:expr,
+            condition = |$from_js_ident:ident| $js_is_none:expr,
             Some = $name_some:ident $(,)?
         }
     ) => {
@@ -102,6 +103,17 @@ macro_rules! def_option_like {
             }
         }
 
+        impl<T: FromJs> FromJs for $name<T> {
+            type Error = T::Error;
+            fn from_js($from_js_ident: wasm_bindgen::JsValue) -> Result<Self, Self::Error> {
+                if $js_is_none {
+                    Ok(Self::$name_none)
+                } else {
+                    T::from_js($from_js_ident).map(Self::$name_some)
+                }
+            }
+        }
+
         impl<T: JsCast> $name<WrapJsCast<T>> {
             pub fn wrap_js_cast(v: T) -> Self {
                 Self::$name_some(WrapJsCast(v))
@@ -113,6 +125,7 @@ macro_rules! def_option_like {
 def_option_like! {
     Nullable {
         None = Null = "null" JsValue::NULL,
+        condition = |v| v.is_null(),
         Some = NonNull,
     }
 }
@@ -120,6 +133,7 @@ def_option_like! {
 def_option_like! {
     Maybe {
         None = Undefined = "undefined" JsValue::UNDEFINED,
+        condition = |v| v.is_undefined(),
         Some = Defined,
     }
 }
