@@ -1,3 +1,10 @@
+# [1.0.0-alpha.14](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.13...v1.0.0-alpha.14) (2022-01-22)
+
+
+### Features
+
+* **convert-js:** trait FromJs ([8450cfd](https://github.com/frender-rs/convert-js/commit/8450cfdfdc67ee16794489e80b29949fbfe88990))
+
 # [1.0.0-alpha.13](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.12...v1.0.0-alpha.13) (2022-01-18)
 
 
