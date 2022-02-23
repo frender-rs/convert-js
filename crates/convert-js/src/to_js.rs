@@ -39,6 +39,12 @@ where
     }
 }
 
+impl<'a, B: 'a + ?Sized + ToJs + ToOwned> ToJs for std::borrow::Cow<'a, B> {
+    fn to_js(&self) -> JsValue {
+        self.as_ref().to_js()
+    }
+}
+
 macro_rules! impl_to_js {
     (deref_copy: $($n:ty)*) => ($(
         impl ToJs for $n {
