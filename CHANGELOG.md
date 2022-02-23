@@ -1,3 +1,10 @@
+# [1.0.0-alpha.15](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.14...v1.0.0-alpha.15) (2022-02-23)
+
+
+### Features
+
+* impl ToJs for Cow ([5b8b9bf](https://github.com/frender-rs/convert-js/commit/5b8b9bf5ad7e032713d95092b2cd93b7f8dc055b))
+
 # [1.0.0-alpha.14](https://github.com/frender-rs/convert-js/compare/v1.0.0-alpha.13...v1.0.0-alpha.14) (2022-01-22)
 
 
